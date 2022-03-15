@@ -3,9 +3,11 @@ package com.example.tool.Controller;
 import com.example.tool.message.ResponseMessage;
 import com.example.tool.repository.RepositoryTransaction;
 import com.example.tool.service.ExcelService;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -51,7 +53,10 @@ public class MainController {
             XSSFRow row = worksheet.getRow(i);
             String account = row.getCell(0).getStringCellValue();
             System.out.println(account);
-            excelService.cloneData(account);
+            WebDriverManager.chromedriver().setup();
+            ChromeDriver chromeDriver = new ChromeDriver();
+            chromeDriver.manage().window().maximize();
+            excelService.cloneData(account,chromeDriver);
         }
         return ResponseEntity.ok().body(new ResponseMessage("Upload thành công !!!"));
     }

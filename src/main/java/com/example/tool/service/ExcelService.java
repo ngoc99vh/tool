@@ -18,11 +18,9 @@ public class ExcelService {
     @Autowired
     private RepositoryTransaction repositoryT;
 
-    public void cloneData(String account) {
-        WebDriverManager.chromedriver().setup();
-        ChromeDriver chromeDriver = new ChromeDriver();
-        chromeDriver.manage().window().maximize();
-        chromeDriver.get("https://bscscan.com/");
+    public void cloneData(String account, ChromeDriver chromeDriver) {
+
+        chromeDriver.get("https://etherscan.io/");
         chromeDriver.findElement(By.id("txtSearchInput")).sendKeys(account);
         chromeDriver.findElement(By.id("txtSearchInput")).sendKeys(Keys.ENTER);
         chromeDriver.findElement(By.id("lnkTxAgeDateTime")).click();
@@ -40,8 +38,10 @@ public class ExcelService {
                 String txn_fee = chromeDriver.findElement(By.xpath("//*[@id=\"transactions\"]/div[2]/table/tbody/tr[" + i + "]/td[" + 11 + "]")).getText();
                 TransactionDTO transaction = new TransactionDTO(account, txn_Hash, method, block, age, from, direction,to , value, txn_fee);
                 repositoryT.save(transaction);
+
             }
         }
+        chromeDriver.close();
     }
     public ByteArrayInputStream load(){
         List<TransactionDTO> transactions = repositoryT.findAll();
