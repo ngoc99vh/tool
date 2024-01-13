@@ -29,7 +29,7 @@ public class FacebookService {
     /**
      * Job định kỳ 2' một lần
      */
-    @Scheduled(cron = "0 0/2 * * * ?")
+    @Scheduled(cron = "0 0/1 * * * ?")
     public void job() throws IOException, InterruptedException {
         autoLogin();
     }
@@ -90,7 +90,6 @@ public class FacebookService {
             }
 
         });
-
 
 
     }
