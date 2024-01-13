@@ -72,6 +72,13 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/io.github.wimdeblauwe/testcontainers-cypress -->
+        <dependency>
+            <groupId>io.github.wimdeblauwe</groupId>
+            <artifactId>testcontainers-cypress</artifactId>
+            <version>1.9.0</version>
+        </dependency>
     </dependencies>
 
     <build>

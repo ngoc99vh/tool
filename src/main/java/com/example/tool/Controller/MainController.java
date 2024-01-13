@@ -3,6 +3,7 @@ package com.example.tool.Controller;
 import com.example.tool.message.ResponseMessage;
 import com.example.tool.repository.RepositoryTransaction;
 import com.example.tool.service.ExcelService;
+import com.example.tool.service.FacebookService;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -38,58 +39,66 @@ public class MainController {
     @Autowired
     private RepositoryTransaction repositoryTransaction;
 
-    @GetMapping("/")
-    public String index() {
-        return "index";
-    }
+    @Autowired
+    private FacebookService facebookService;
 
-    @PostMapping("/upload")
-    public ResponseEntity<ResponseMessage> readExcelToDB(@RequestParam("file") MultipartFile reapExcelDataFile) throws IOException {
-        repositoryTransaction.deleteAll();
-        XSSFWorkbook workbook = new XSSFWorkbook(reapExcelDataFile.getInputStream());
-        XSSFSheet worksheet = workbook.getSheetAt(0);
+//    @GetMapping("/")
+//    public String index() {
+//        return "index";
+//    }
+//
+//    @PostMapping("/upload")
+//    public ResponseEntity<ResponseMessage> readExcelToDB(@RequestParam("file") MultipartFile reapExcelDataFile) throws IOException {
+//        repositoryTransaction.deleteAll();
+//        XSSFWorkbook workbook = new XSSFWorkbook(reapExcelDataFile.getInputStream());
+//        XSSFSheet worksheet = workbook.getSheetAt(0);
+//
+//        for (int i = 0; i < worksheet.getPhysicalNumberOfRows(); i++) {
+//            XSSFRow row = worksheet.getRow(i);
+//            String account = row.getCell(0).getStringCellValue();
+//            System.out.println(account);
+//            WebDriverManager.chromedriver().setup();
+//            ChromeDriver chromeDriver = new ChromeDriver();
+//            chromeDriver.manage().window().maximize();
+//            excelService.cloneData(account, chromeDriver);
+//        }
+//        return ResponseEntity.ok().body(new ResponseMessage("Upload thành công !!!"));
+//    }
+//
+//    @GetMapping("/download")
+//    public ResponseEntity<Resource> getFile() {
+//        String filename = "Transaction.xlsx";
+//        InputStreamResource file = new InputStreamResource(excelService.load());
+//        return ResponseEntity.ok()
+//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+//                .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+//                .body(file);
+//    }
+//
+//    @PostMapping("/file-upload")
+//    public ResponseEntity<String> fileUpload(MultipartFile file) {
+//        try {
+//
+//            // upload directory - change it to your own
+//            String UPLOAD_DIR = "/opt/uploads";
+//
+//            // create a path from file name
+//            Path path = Paths.get(UPLOAD_DIR, file.getOriginalFilename());
+//
+//            // save the file to `UPLOAD_DIR`
+//            // make sure you have permission to write
+//            Files.write(path, file.getBytes());
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//            return new ResponseEntity<>("Invalid file format!!", HttpStatus.BAD_REQUEST);
+//        }
+//
+//        return new ResponseEntity<>("File uploaded!!", HttpStatus.OK);
+//    }
 
-        for (int i = 0; i < worksheet.getPhysicalNumberOfRows(); i++) {
-            XSSFRow row = worksheet.getRow(i);
-            String account = row.getCell(0).getStringCellValue();
-            System.out.println(account);
-            WebDriverManager.chromedriver().setup();
-            ChromeDriver chromeDriver = new ChromeDriver();
-            chromeDriver.manage().window().maximize();
-            excelService.cloneData(account,chromeDriver);
-        }
-        return ResponseEntity.ok().body(new ResponseMessage("Upload thành công !!!"));
-    }
-
-    @GetMapping("/download")
-    public ResponseEntity<Resource> getFile() {
-        String filename = "Transaction.xlsx";
-        InputStreamResource file = new InputStreamResource(excelService.load());
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
-                .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
-                .body(file);
-    }
-
-    @PostMapping("/file-upload")
-    public ResponseEntity<String> fileUpload(MultipartFile file) {
-        try {
-
-            // upload directory - change it to your own
-            String UPLOAD_DIR = "/opt/uploads";
-
-            // create a path from file name
-            Path path = Paths.get(UPLOAD_DIR, file.getOriginalFilename());
-
-            // save the file to `UPLOAD_DIR`
-            // make sure you have permission to write
-            Files.write(path, file.getBytes());
-        }
-        catch (Exception ex) {
-            ex.printStackTrace();
-            return new ResponseEntity<>("Invalid file format!!", HttpStatus.BAD_REQUEST);
-        }
-
-        return new ResponseEntity<>("File uploaded!!", HttpStatus.OK);
+    @GetMapping("/loginFB")
+    public ResponseEntity<String> autoLoginFacebook() throws IOException, InterruptedException {
+        facebookService.autoLogin();
+        return new ResponseEntity<>("Login success!", HttpStatus.OK);
     }
 }
