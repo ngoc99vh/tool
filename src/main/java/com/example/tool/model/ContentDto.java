@@ -5,6 +5,16 @@ import java.util.List;
 public class ContentDto {
     private String userName;
     private String password;
+
+    public List<String> getProxy() {
+        return proxy;
+    }
+
+    public void setProxy(List<String> proxy) {
+        this.proxy = proxy;
+    }
+
+    private List<String> proxy;
     private List<Contents> contents;
 
     public String getUserName() {
