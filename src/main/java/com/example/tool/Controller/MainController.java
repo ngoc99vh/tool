@@ -130,22 +130,33 @@ public class MainController {
     public void getExcel(javax.servlet.http.HttpServletResponse response) throws Exception {
         //Get JRXML template from resources folder
 //        Resource resource = context.getResource("classpath:reports/" + jrxml + ".jrxml");
-        InputStream jasperStream = this.getClass().getResourceAsStream("/reports/car_list.jrxml");
+        InputStream jasperStream = this.getClass().getResourceAsStream("/reports/car_list2.jrxml");
         JasperDesign design = JRXmlLoader.load(jasperStream);
         JasperReport report = JasperCompileManager.compileReport(design);
 
         Map<String, Object> params = new HashMap<>();
 
         List<Car> cars = new ArrayList<>();
-        Car car = new Car(1,"123","123","123","123",1999);
-        Car car1 = new Car(1,"123","123","123","123",1999);
-        Car car2 = new Car(1,"123","123","123","123",1999);
-        Car car3 = new Car(1,"123","123","123","123",1999);
-        Car car4 = new Car(1,"123","123","123","123",1999);
+
+        Car car = new Car(1L,"123","123","123","123", 123F,123F,"123","123","123","123","123","123",false);
+        Car car1 = new Car(1L,"123","123","123","123",123F,123F,"123","123","123","123","123","123",false);
+        Car car2 = new Car(1L,"123","123","123","123",123F,123F,"123","123","123","123","123","123",false);
+        Car car3 = new Car(1L,"123","123","123","123",123F,123F,"123","123","123","123","123","123",false);
+        Car car4 = new Car(1L,"123","123","123","123",123F,123F,"123","123","123","123","123","123",false);
+//        Car car = new Car(1,"123","123","123","123",1999);
+//        Car car1 = new Car(1,"123","123","123","123",1999);
+//        Car car2 = new Car(1,"123","123","123","123",1999);
+//        Car car3 = new Car(1,"123","123","123","123",1999);
+//        Car car4 = new Car(1,"123","123","123","123",1999);
         cars.add(car);
         cars.add(car1);
         cars.add(car2);
         cars.add(car3);
+        cars.add(car4);
+        cars.add(car4);
+        cars.add(car4);
+        cars.add(car4);
+        cars.add(car4);
         cars.add(car4);
 
         JRDataSource dataSource = new JRBeanCollectionDataSource(cars);
@@ -157,98 +168,98 @@ public class MainController {
         exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
         File outputFile = new File("excelTest.xlsx");
         exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(outputFile));
-        SimpleXlsxReportConfiguration configuration = new SimpleXlsxReportConfiguration();
-        configuration.setDetectCellType(true);//Set configuration as you like it!!
-        configuration.setCollapseRowSpan(false);
-        exporter.setConfiguration(configuration);
+//        SimpleXlsxReportConfiguration configuration = new SimpleXlsxReportConfiguration();
+//        configuration.setDetectCellType(true);//Set configuration as you like it!!
+//        configuration.setCollapseRowSpan(false);
+//        exporter.setConfiguration(configuration);
         exporter.exportReport();
     }
-    @GetMapping(path = "/excel2")
-    @ResponseBody
-    private void getDownloadReportXlsx(HttpServletRequest request, javax.servlet.http.HttpServletResponse response) {
-        try {
-            //uncomment this codes if u are want to use servlet output stream
-            ServletOutputStream servletOutputStream = response.getOutputStream();
-
-            Map<String, Object> params = new HashMap<>();
-
-            List<Car> cars = new ArrayList<>();
-            Car car = new Car(1,"123","123","123","123",1999);
-            cars.add(car);
-
-            //Data source Set
-            JRDataSource dataSource = new JRBeanCollectionDataSource(cars);
-            params.put("datasource", dataSource);
-
-            //get real path for report
-            InputStream jasperStream = this.getClass().getResourceAsStream("/reports/car_list.jrxml");
-            JasperDesign design = JRXmlLoader.load(jasperStream);
-            JasperReport report = JasperCompileManager.compileReport(design);
-
-            JasperPrint jasperPrint = JasperFillManager.fillReport(report, params, dataSource);
-
-            JRXlsxExporter xlsxExporter = new JRXlsxExporter();
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
-
-            xlsxExporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
-            xlsxExporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, "car_list.xls");
-
-            //uncomment this codes if u are want to use servlet output stream
-//        xlsxExporter.setParameter(JRExporterParameter.OUTPUT_STREAM, servletOutputStream);
-
-            xlsxExporter.setParameter(JRExporterParameter.OUTPUT_STREAM, os);
-//        xlsxExporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-//        xlsxExporter.setExporterOutput(new SimpleOutputStreamExporterOutput("car_list.xlsx"));
-//        xlsxExporter.setExporterOutput(new SimpleOutputStreamExporterOutput(os));
-            xlsxExporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.TRUE);
-            xlsxExporter.setParameter(JRXlsExporterParameter.IS_DETECT_CELL_TYPE, Boolean.TRUE);
-            xlsxExporter.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.FALSE);
-            xlsxExporter.setParameter(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Boolean.TRUE);
-//        xlsxExporter.exportReport();
-
-
-            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-            response.setHeader("Content-Disposition", "attachment; filename=car_list.xls");
-
-            //uncomment this codes if u are want to use servlet output stream
-//        servletOutputStream.write(os.toByteArray());
-
-            response.getOutputStream().write(os.toByteArray());
-            response.getOutputStream().flush();
-            response.getOutputStream().close();
-            response.flushBuffer();
-        } catch (JRException ex) {
-            System.out.println("Error : " + ex.getMessage());
-        } catch (IOException ex) {
-            System.out.println("IOException " + ex.getMessage());
-        }
-    }
-    @GetMapping(path = "/pdf")
-    @ResponseBody
-//    public void getPdf(@PathVariable String jrxml, HttpServletResponse response) throws Exception {
-    public void getPdf(HttpServletResponse response) throws Exception {
-        //Get JRXML template from resources folder
-//        Resource resource = context.getResource("classpath:reports/" + jrxml + ".jrxml");
-        Resource resource = context.getResource("classpath:reports/car_list.jrxml");
-        //Compile to jasperReport
-        InputStream inputStream = resource.getInputStream();
-        JasperReport report = JasperCompileManager.compileReport(inputStream);
-        //Parameters Set
-        Map<String, Object> params = new HashMap<>();
-
-        List<Car> cars = new ArrayList<>();
-        Car car = new Car(1,"123","123","123","123",1999);
-        cars.add(car);
-
-        //Data source Set
-        JRDataSource dataSource = new JRBeanCollectionDataSource(cars);
-        params.put("datasource", dataSource);
-
-        //Make jasperPrint
-        JasperPrint jasperPrint = JasperFillManager.fillReport(report, params, dataSource);
-        //Media Type
-        response.setContentType(MediaType.APPLICATION_PDF_VALUE);
-        //Export PDF Stream
-        JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
-    }
+//    @GetMapping(path = "/excel2")
+//    @ResponseBody
+//    private void getDownloadReportXlsx(HttpServletRequest request, javax.servlet.http.HttpServletResponse response) {
+//        try {
+//            //uncomment this codes if u are want to use servlet output stream
+//            ServletOutputStream servletOutputStream = response.getOutputStream();
+//
+//            Map<String, Object> params = new HashMap<>();
+//
+//            List<Car> cars = new ArrayList<>();
+//            Car car = new Car(1,"123","123","123","123",1999);
+//            cars.add(car);
+//
+//            //Data source Set
+//            JRDataSource dataSource = new JRBeanCollectionDataSource(cars);
+//            params.put("datasource", dataSource);
+//
+//            //get real path for report
+//            InputStream jasperStream = this.getClass().getResourceAsStream("/reports/car_list.jrxml");
+//            JasperDesign design = JRXmlLoader.load(jasperStream);
+//            JasperReport report = JasperCompileManager.compileReport(design);
+//
+//            JasperPrint jasperPrint = JasperFillManager.fillReport(report, params, dataSource);
+//
+//            JRXlsxExporter xlsxExporter = new JRXlsxExporter();
+//            ByteArrayOutputStream os = new ByteArrayOutputStream();
+//
+//            xlsxExporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+//            xlsxExporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, "car_list.xls");
+//
+//            //uncomment this codes if u are want to use servlet output stream
+////        xlsxExporter.setParameter(JRExporterParameter.OUTPUT_STREAM, servletOutputStream);
+//
+//            xlsxExporter.setParameter(JRExporterParameter.OUTPUT_STREAM, os);
+////        xlsxExporter.setExporterInput(new SimpleExporterInput(jasperPrint));
+////        xlsxExporter.setExporterOutput(new SimpleOutputStreamExporterOutput("car_list.xlsx"));
+////        xlsxExporter.setExporterOutput(new SimpleOutputStreamExporterOutput(os));
+//            xlsxExporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.TRUE);
+//            xlsxExporter.setParameter(JRXlsExporterParameter.IS_DETECT_CELL_TYPE, Boolean.TRUE);
+//            xlsxExporter.setParameter(JRXlsExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.FALSE);
+//            xlsxExporter.setParameter(JRXlsExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Boolean.TRUE);
+////        xlsxExporter.exportReport();
+//
+//
+//            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+//            response.setHeader("Content-Disposition", "attachment; filename=car_list.xls");
+//
+//            //uncomment this codes if u are want to use servlet output stream
+////        servletOutputStream.write(os.toByteArray());
+//
+//            response.getOutputStream().write(os.toByteArray());
+//            response.getOutputStream().flush();
+//            response.getOutputStream().close();
+//            response.flushBuffer();
+//        } catch (JRException ex) {
+//            System.out.println("Error : " + ex.getMessage());
+//        } catch (IOException ex) {
+//            System.out.println("IOException " + ex.getMessage());
+//        }
+//    }
+//    @GetMapping(path = "/pdf")
+//    @ResponseBody
+////    public void getPdf(@PathVariable String jrxml, HttpServletResponse response) throws Exception {
+//    public void getPdf(HttpServletResponse response) throws Exception {
+//        //Get JRXML template from resources folder
+////        Resource resource = context.getResource("classpath:reports/" + jrxml + ".jrxml");
+//        Resource resource = context.getResource("classpath:reports/car_list.jrxml");
+//        //Compile to jasperReport
+//        InputStream inputStream = resource.getInputStream();
+//        JasperReport report = JasperCompileManager.compileReport(inputStream);
+//        //Parameters Set
+//        Map<String, Object> params = new HashMap<>();
+//
+//        List<Car> cars = new ArrayList<>();
+//        Car car = new Car(1,"123","123","123","123",1999);
+//        cars.add(car);
+//
+//        //Data source Set
+//        JRDataSource dataSource = new JRBeanCollectionDataSource(cars);
+//        params.put("datasource", dataSource);
+//
+//        //Make jasperPrint
+//        JasperPrint jasperPrint = JasperFillManager.fillReport(report, params, dataSource);
+//        //Media Type
+//        response.setContentType(MediaType.APPLICATION_PDF_VALUE);
+//        //Export PDF Stream
+//        JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
+//    }
 }

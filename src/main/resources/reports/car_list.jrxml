@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.8.0.final using JasperReports Library version 6.8.0-2ed8dfabb690ff337a5797129f2cd92902b0c87b  -->
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Cars" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="81009a31-11e5-494b-9ef1-14c9122bcc33">
     <property name="net.sf.jasperreports.export.xls.exclude.origin.keep.first.band.1" value="pageHeader"/>
     <property name="net.sf.jasperreports.export.xls.exclude.origin.band.2" value="pageFooter"/>
@@ -105,7 +105,7 @@
                 <text><![CDATA[fuel]]></text>
             </staticText>
             <staticText>
-                <reportElement x="700" y="0" width="100" height="30" uuid="a5f20289-d9ee-42e6-b6e7-d99397a68fe2">
+                <reportElement x="350" y="0" width="110" height="20" uuid="a5f20289-d9ee-42e6-b6e7-d99397a68fe2">
                     <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="19599bff-2539-4d8b-9272-8e605e8a6432"/>
                 </reportElement>
                 <box>
